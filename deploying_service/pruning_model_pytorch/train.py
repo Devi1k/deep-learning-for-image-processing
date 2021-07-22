@@ -30,7 +30,7 @@ train_dataset = datasets.ImageFolder(root=image_path+"train",
 train_num = len(train_dataset)
 
 # {'daisy':0, 'dandelion':1, 'roses':2, 'sunflower':3, 'tulips':4}
-flower_list = train_dataset.class_to_idx
+_flower_list = train_dataset.class_to_idx
 cla_dict = dict((val, key) for key, val in flower_list.items())
 # write dict into json file
 json_str = json.dumps(cla_dict, indent=4)

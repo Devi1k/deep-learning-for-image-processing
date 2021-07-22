@@ -13,7 +13,8 @@ assert tf.version.VERSION >= "2.4.0", "version of tf must greater/equal than 2.4
 
 
 def main():
-    data_root = "/data/flower_photos"  # get data root path
+    print(os.path.abspath("5547758_eea9edfd54_n.jpg"))
+    data_root = "/flower_data/flower_photos"  # get data root path
 
     if not os.path.exists("./save_weights"):
         os.makedirs("./save_weights")
