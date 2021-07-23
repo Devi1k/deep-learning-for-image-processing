@@ -11,10 +11,13 @@ from utils import generate_ds
 
 assert tf.version.VERSION >= "2.4.0", "version of tf must greater/equal than 2.4.0"
 
-
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 def main():
-    print(os.path.abspath("5547758_eea9edfd54_n.jpg"))
-    data_root = "/flower_data/flower_photos"  # get data root path
+    data_root = "./flower_data/flower_photos"  # get data root path
+    print(tf.__version__)
+    print(tf.config.list_physical_devices('GPU'))
+    print(tf.config.list_physical_devices('CPU'))
 
     if not os.path.exists("./save_weights"):
         os.makedirs("./save_weights")
