@@ -4,7 +4,7 @@ import json
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torchvision import transforms, datasets
+from torchvision import transforms, datasets, models
 from tqdm import tqdm
 
 from model_v2 import MobileNetV2
@@ -61,7 +61,7 @@ def main():
 
     # create model
     net = MobileNetV2(num_classes=5)
-
+    net = models.MobileNetV2
     # load pretrain weights
     # download url: https://download.pytorch.org/models/mobilenet_v2-b0353104.pth
     model_weight_path = "./mobilenet_v2.pth"

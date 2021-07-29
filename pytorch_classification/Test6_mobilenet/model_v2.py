@@ -64,6 +64,7 @@ class MobileNetV2(nn.Module):
 
         inverted_residual_setting = [
             # t, c, n, s
+            #扩展因子，channels，倒残差重复次数，stride
             [1, 16, 1, 1],
             [6, 24, 2, 2],
             [6, 32, 3, 2],
