@@ -8,7 +8,7 @@ from torchvision import transforms, datasets
 from tqdm import tqdm
 
 from model import resnet34
-
+import torchsummary
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -58,18 +58,19 @@ def main():
                                                                            val_num))
     
     net = resnet34()
+    in_channel = net.fc.in_features
+    net.fc = nn.Linear(in_channel, 5)
+    net.to(device)
     # load pretrain weights
     # download url: https://download.pytorch.org/models/resnet34-333f7ec4.pth
-    model_weight_path = "./resnet34-pre.pth"
+    model_weight_path = "./resnet34.pth"
     assert os.path.exists(model_weight_path), "file {} does not exist.".format(model_weight_path)
-    net.load_state_dict(torch.load(model_weight_path, map_location=device))
+    net.load_state_dict(torch.load(model_weight_path),strict=False)
     # for param in net.parameters():
     #     param.requires_grad = False
 
     # change fc layer structure
-    in_channel = net.fc.in_features
-    net.fc = nn.Linear(in_channel, 5)
-    net.to(device)
+
 
     # define loss function
     loss_function = nn.CrossEntropyLoss()
@@ -126,7 +127,6 @@ def main():
             torch.save(net.state_dict(), save_path)
 
     print('Finished Training')
-
-
+    torchsummary.summary(net,input_size=[(3,224,224)]) #summary中basicblock/bottleneck显示在残差块的最后
 if __name__ == '__main__':
     main()

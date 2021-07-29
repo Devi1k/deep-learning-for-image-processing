@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 
-
+#34layers使用basicblock，50layers使用bottleneck
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -57,9 +57,9 @@ class Bottleneck(nn.Module):
                                kernel_size=3, stride=stride, bias=False, padding=1)
         self.bn2 = nn.BatchNorm2d(width)
         # -----------------------------------------
-        self.conv3 = nn.Conv2d(in_channels=width, out_channels=out_channel*self.expansion,
+        self.conv3 = nn.Conv2d(in_channels=width, out_channels=out_channel * self.expansion,
                                kernel_size=1, stride=1, bias=False)  # unsqueeze channels
-        self.bn3 = nn.BatchNorm2d(out_channel*self.expansion)
+        self.bn3 = nn.BatchNorm2d(out_channel * self.expansion)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
 
@@ -91,13 +91,10 @@ class ResNet(nn.Module):
                  block,
                  blocks_num,
                  num_classes=1000,
-                 include_top=True,
-                 groups=1,
-                 width_per_group=64):
+                 include_top=True, groups=1, width_per_group=64):
         super(ResNet, self).__init__()
         self.include_top = include_top
         self.in_channel = 64
-
         self.groups = groups
         self.width_per_group = width_per_group
 
@@ -106,7 +103,8 @@ class ResNet(nn.Module):
         self.bn1 = nn.BatchNorm2d(self.in_channel)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, 64, blocks_num[0])
+        #每个layer的padding都是same，然后使用1*1卷积升维（channels翻倍）
+        self.layer1 = self._make_layer(block, 64, blocks_num[0])  # 3 4 6 3
         self.layer2 = self._make_layer(block, 128, blocks_num[1], stride=2)
         self.layer3 = self._make_layer(block, 256, blocks_num[2], stride=2)
         self.layer4 = self._make_layer(block, 512, blocks_num[3], stride=2)
